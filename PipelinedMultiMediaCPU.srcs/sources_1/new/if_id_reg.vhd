@@ -39,15 +39,16 @@ entity if_id_reg is
         regD        : out std_logic_vector(addr_length - 1 downto 0); --address for destination register
         aluOpp      : out std_logic_vector(2 downto 0);               --ALU Oppcode. Incicates function	 
         immediate   : out std_logic_vector(15 downto 0);              --16-bit immediate for li
-        ms4b        : out std_logic_vector(3 downto 0);               --4 ms bits of instruction
-        mpyOpp      : out std_logic;
-        shftOpp     : out std_logic
+        write_en    : out std_logic;                                  --write enable control signal
+        msmux_sel   : out std_logic_vector(1 downto 0);               --mux to alu second param
+        alumux_sel  : out std_logic_vector(2 downto 0);               --mux for stage 3 output
+        ma_ms_sel   : out std_logic                                  --multiple add/sub high or low. 
 	);						 						
 end if_id_reg;
 
 architecture behavioral of if_id_reg is
 begin
-    p1: process(clk)
+    regAddrCalc: process(clk)
     begin
         if(rising_edge(clk))then
                 --output all known data--
@@ -56,33 +57,97 @@ begin
 			regB      <= instruction(14 downto 10);
             regC 	  <= instruction(19 downto 15);
 			immediate <= instruction(20 downto 5);
-			ms4b      <= instruction(23 downto 20);
-                --decode alu opp--
-			if (instruction(18 downto 15) = "0010") then
-				aluOpp <= "010";    --AND--
-			elsif (instruction(18 downto 15) = "0011") then
-				aluOpp <= "011";    --OR--
-			elsif (instruction(18 downto 15) = "0000") then
-				aluOpp <= "000";    --NOP--
-			elsif (instruction(18 downto 15) = "1000") then
-				aluOpp <= "001";    --SUM--
-            elsif (instruction(18 downto 15) = "1001") then
-                aluOpp <= "101";    --SUB--
-			else
-				aluOpp <= "000";
-			end if;
-			--GOING TO NEED SOME TYPE OF SHIFT UNIT--
-			if(instruction(15 downto 12) = "0111")then
-				shftOpp <= '1';
-			else
-				shftOpp <= '0';
-			end if;
-			--AND MULTYPLYING UNIT--
-			if(instruction(15 downto 12) = "1111")then
-				mpyOpp <= '1';
-			else
-				mpyOpp <= '0';
-			end if;
 		end if;
-	end process;	
+	end process;
+	
+	aluOppCalc: process(clk)
+	begin      --decode alu opp--
+        if (rising_edge(clk)) then
+            if (instruction(23) = '1') then
+                aluOpp <= "001";    --SUM--
+            elsif (instruction(22) = '1') then
+                if (instruction(21) = '0') then
+                    aluOpp <= "001";    --SUM--
+                elsif (instruction(21) = '1') then
+                    aluOpp <= "101";    --SUB--
+                end if;
+            else
+                if (instruction(18 downto 15) = "0000") then
+                    aluOpp <= "000";    --NOP--
+                elsif (
+                        (instruction(18 downto 15) = "1000") |  --packed 32 unsigned
+                        (instruction(18 downto 15) = "1010") |  --packed 16 unsigned
+                        (instruction(18 downto 15) = "1100")    --packed 16 signed sat
+                      ) then
+                    aluOpp <= "001";    --SUM--
+                elsif (instruction(18 downto 15) = "0010") then
+                    aluOpp <= "010";    --AND--
+                elsif (instruction(18 downto 15) = "0011") then
+                    aluOpp <= "011";    --OR--
+                elsif (
+                        (instruction(18 downto 15) = "1001") |  --packed 32 unsigned
+                        (instruction(18 downto 15) = "1011") |  --pakced 16 unsigned  
+                        (instruction(18 downto 15) = "1101")    --packed 16 signed sat
+                      ) then
+                    aluOpp <= "101";    --SUB--
+                else
+                    aluOpp <= "000";
+                end if;
+            end if;
+        end if;
+	end process;
+    
+    writeEnCalc: process(clk)
+    begin
+        if (rising_edge(clk)) then
+            if (instruction(23 downto 22) = "00") then
+                if (instruction(18 downto 15) = "0000") then
+                    write_en <= '0';        --only nop--
+                else
+                    write_en <= '1';
+                end if;
+            else
+                write_en <= '1';
+            end if;
+        end if;
+    end process;
+
+    msmuxSelCalc: process(clk)
+    begin
+        if (rising_edge(clk)) then
+            if (instruction(23) = '1') then
+                msmux_sel <= "00";
+            elsif (instruction(23 downto 22) = "01") then
+                msmux_sel <= "10";
+            else
+                msmux_sel <= "01";
+             end if;
+        end if;
+    end process;
+    
+    aluMuxSelCalc: process(clk)
+    begin
+        if (rising_edge(clk)) then
+            if (instruction(23 downto 22) = "00") then
+                if (instruction(18 downto 15) = "1110") then
+                    alumux_sel <= "001";    --mpy--
+                elsif (
+                        (instruction(18 downto 15) = "0110") |
+                        (instruction(18 downto 15) = "0111")
+                      ) then
+                    alumux_sel <= "010";    --shift and rotate--
+                elsif (instruction(18 downto 15) = "0001") then
+                    alumux_sel <= "011";     --broadcast--
+                elsif (instruction(18 downto 15) = "0100") then
+                    alumux_sel <= "100";   --hamming weight--
+                elsif (instruction(18 downto 15) = "0101") then
+                    alumux_sel <= "101";    --leading zeros--
+                else
+                    alumux_sel <= "000";
+                end if;
+            else
+                alumux_sel <= "000";
+             end if;
+        end if;
+    end process;
 end behavioral;
