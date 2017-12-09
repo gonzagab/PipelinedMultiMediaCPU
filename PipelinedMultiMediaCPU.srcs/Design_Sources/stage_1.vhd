@@ -39,13 +39,16 @@ entity stage_1 is
         regA        : out std_logic_vector(size - 1 downto 0); --address for rs1; regA
         regB        : out std_logic_vector(size - 1 downto 0); --address for rs2; regB
         regC        : out std_logic_vector(size - 1 downto 0); --address for rs3; regC
+        
         regD        : out std_logic_vector(size - 1 downto 0); --address for destination register
-        aluOpp      : out std_logic_vector(2 downto 0);        --ALU Oppcode. Incicates function     
-        immediate   : out std_logic_vector(15 downto 0);       --16-bit immediate for li
         write_en    : out std_logic;                                  --write enable control signal
+        ma_ms_sel   : out std_logic;                            --multiple add/sub high or low. 
+
+        aluOpp      : out std_logic_vector(2 downto 0);        --ALU Oppcode. Incicates function
+        alu_opp_len : out std_logic_vector(1 downto 0);    
+        immediate   : out std_logic_vector(15 downto 0);       --16-bit immediate for li
         msmux_sel   : out std_logic_vector(1 downto 0);               --mux to alu second param
-        alumux_sel  : out std_logic_vector(2 downto 0);               --mux for stage 3 output
-        ma_ms_sel   : out std_logic                                   --multiple add/sub high or low. 
+        alumux_sel  : out std_logic_vector(2 downto 0)               --mux for stage 3 output
     );
 end stage_1;
 
@@ -70,6 +73,7 @@ begin
         regC      =>    regC        ,
         regD      =>    regD        ,
         aluOpp    =>    aluOpp      ,
+        alu_opp_len => alu_opp_len,
         immediate =>    immediate   ,
         write_en  =>    write_en    ,
         msmux_sel =>    msmux_sel   ,

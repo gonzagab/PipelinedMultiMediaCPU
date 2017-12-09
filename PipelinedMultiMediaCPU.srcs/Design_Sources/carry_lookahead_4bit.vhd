@@ -1,5 +1,4 @@
 ----------------------------------------------------------------------------------
--- Engineer:        Bryant Gonzaga
 -- Create Date:     07/18/2017 06:59:09 PM
 -- Module Name:     carry_lookahead_4bit - datatflow
 -- Project Name:    pipelined_multimedia_cell_lite_unit

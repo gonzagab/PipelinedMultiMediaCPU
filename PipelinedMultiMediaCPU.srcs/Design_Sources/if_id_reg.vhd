@@ -42,7 +42,8 @@ entity if_id_reg is
         write_en    : out std_logic;                                  --write enable control signal
         msmux_sel   : out std_logic_vector(1 downto 0);               --mux to alu second param
         alumux_sel  : out std_logic_vector(2 downto 0);               --mux for stage 3 output
-        ma_ms_sel   : out std_logic                                  --multiple add/sub high or low. 
+        ma_ms_sel   : out std_logic;                                  --multiple add/sub high or low.
+        alu_opp_len : out std_logic_vector(1 downto 0) 
 	);						 						
 end if_id_reg;
 
@@ -65,33 +66,45 @@ begin
         if (rising_edge(clk)) then
             if (instruction(23) = '1') then
                 aluOpp <= "001";    --SUM--
+                alu_opp_len <= "00";
             elsif (instruction(22) = '1') then
+                alu_opp_len <= "01";
                 if (instruction(21) = '0') then
                     aluOpp <= "001";    --SUM--
-                elsif (instruction(21) = '1') then
+                else
                     aluOpp <= "101";    --SUB--
                 end if;
             else
                 if (instruction(18 downto 15) = "0000") then
                     aluOpp <= "000";    --NOP--
-                elsif (
-                        (instruction(18 downto 15) = "1000") |  --packed 32 unsigned
-                        (instruction(18 downto 15) = "1010") |  --packed 16 unsigned
-                        (instruction(18 downto 15) = "1100")    --packed 16 signed sat
-                      ) then
+                    alu_opp_len <= "00";
+                elsif (instruction(18 downto 15) = "1000") then  --packed 32 unsigned
                     aluOpp <= "001";    --SUM--
+                    alu_opp_len <= "01";
+                elsif (instruction(18 downto 15) = "1010") then  --packed 16 unsigned
+                    aluOpp <= "001";    --SUM--
+                    alu_opp_len <= "10";
+                elsif (instruction(18 downto 15) = "1100") then   --packed 16 signed sat
+                    aluOpp <= "001";    --SUM--
+                    alu_opp_len <= "10";
                 elsif (instruction(18 downto 15) = "0010") then
                     aluOpp <= "010";    --AND--
+                    alu_opp_len <= "00";
                 elsif (instruction(18 downto 15) = "0011") then
                     aluOpp <= "011";    --OR--
-                elsif (
-                        (instruction(18 downto 15) = "1001") |  --packed 32 unsigned
-                        (instruction(18 downto 15) = "1011") |  --pakced 16 unsigned  
-                        (instruction(18 downto 15) = "1101")    --packed 16 signed sat
-                      ) then
+                    alu_opp_len <= "00";
+                elsif (instruction(18 downto 15) = "1001") then  --packed 32 unsigned
                     aluOpp <= "101";    --SUB--
+                    alu_opp_len <= "01";
+                elsif (instruction(18 downto 15) = "1011") then  --pakced 16 unsigned
+                    aluOpp <= "101";    --SUB--
+                    alu_opp_len <= "10";  
+                elsif (instruction(18 downto 15) = "1101") then   --packed 16 signed sat
+                    aluOpp <= "101";    --SUB--
+                    alu_opp_len <= "10";
                 else
                     aluOpp <= "000";
+                    alu_opp_len <= "00";
                 end if;
             end if;
         end if;
@@ -132,7 +145,7 @@ begin
                 if (instruction(18 downto 15) = "1110") then
                     alumux_sel <= "001";    --mpy--
                 elsif (
-                        (instruction(18 downto 15) = "0110") |
+                        (instruction(18 downto 15) = "0110") or
                         (instruction(18 downto 15) = "0111")
                       ) then
                     alumux_sel <= "010";    --shift and rotate--

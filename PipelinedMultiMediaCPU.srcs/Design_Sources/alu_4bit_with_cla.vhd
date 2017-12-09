@@ -1,5 +1,4 @@
 ----------------------------------------------------------------------------------
--- Engineer:        Bryant Gonzaga
 -- Create Date:     07/18/2017 07:09:03 PM
 -- Module Name:     alu_4bit_with_cla - structural
 -- Project Name:    pipelined_multimedia_cell_lite_unit

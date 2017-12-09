@@ -1,5 +1,4 @@
 ----------------------------------------------------------------------------------
--- Engineer:        Bryant Gonzaga
 -- Create Date:     07/18/2017 05:50:33 PM
 -- Module Name:     mux_n_in_1_out - behavioral
 -- Project Name:    pipelined_multimedia_cell_lite_unit

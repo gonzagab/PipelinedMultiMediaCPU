@@ -30,6 +30,7 @@ entity rd_ex_reg is
         dataBi      : in std_logic_vector(63 downto 0);	--data from register B; rs2
         dataCi      : in std_logic_vector(63 downto 0);	--data from register C; rs3
         aluOppi     : in std_logic_vector(2 downto 0);	--ALU Opp
+        alu_opp_leni : in std_logic_vector(1 downto 0);
         msmux_seli  : in std_logic_vector(1 downto 0);    --select for alu param input
         alumux_seli : in std_logic_vector(2 downto 0);
         
@@ -39,6 +40,7 @@ entity rd_ex_reg is
         dataBo      : out std_logic_vector(63 downto 0);	--data from register B; rs2
         dataCo      : out std_logic_vector(63 downto 0);	--data from register C; rs3
         aluOppo     : out std_logic_vector(2 downto 0);	    --ALU opp
+        alu_opp_leno : out std_logic_vector(1 downto 0);
         msmux_selo  : out std_logic_vector(1 downto 0);    --select for alu param input
         alumux_selo : out std_logic_vector(2 downto 0)
 	);
@@ -53,6 +55,7 @@ begin
 			dataBo 	    <= dataBi;
 			dataCo 	    <= dataCi;
 			aluOppo     <= aluOppi;
+			alu_opp_leno <= alu_opp_leni;
 			msmux_selo  <= msmux_seli;
             alumux_selo <= alumux_seli;
 		end if;

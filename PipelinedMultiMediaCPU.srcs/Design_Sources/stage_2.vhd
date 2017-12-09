@@ -33,16 +33,18 @@ entity stage_2 is
         regA        : in std_logic_vector(size - 1 downto 0); --address for rs1; regA
         regB        : in std_logic_vector(size - 1 downto 0); --address for rs2; regB
         regC        : in std_logic_vector(size - 1 downto 0); --address for rs3; regC
-        regD        : in std_logic_vector(size - 1 downto 0); --address for destination register
-        write_en    : in std_logic;                           --write enable control signal
-        data_wb     : in std_logic_vector(63 downto 0);       --data to be saved to register file
-  
-        ma_ms_sel   : in std_logic;                           --multiple add/sub high or low.
         
-        immediate   : in std_logic_vector(15 downto 0);       --16-bit immediate for li      
+        regD        : in std_logic_vector(size - 1 downto 0); --address for destination register
+        write_en    : in std_logic;                           --write enable control signal  
+        ma_ms_sel   : in std_logic;                           --multiple add/sub high or low.
+
         aluOppi     : in std_logic_vector(2 downto 0);        --ALU Oppcode. Incicates function
+        alu_opp_leni : in std_logic_vector(1 downto 0);
+        immediate   : in std_logic_vector(15 downto 0);       --16-bit immediate for li      
         msmux_seli  : in std_logic_vector(1 downto 0);        --mux to alu second param
         alumux_seli : in std_logic_vector(2 downto 0);        --mux for stage 3 output
+        
+        data_wb     : in std_logic_vector(63 downto 0);       --data to be saved to register file
         
         clk         : in std_logic;                           --system clock
             --Outputs--
@@ -50,6 +52,7 @@ entity stage_2 is
         dataB       : out std_logic_vector(63 downto 0);
         dataC       : out std_logic_vector(63 downto 0);
         aluOppo     : out std_logic_vector(2 downto 0);        --ALU Oppcode. Incicates function
+        alu_opp_leno : out std_logic_vector(1 downto 0);
         msmux_selo  : out std_logic_vector(1 downto 0);        --mux to alu second param
         alumux_selo : out std_logic_vector(2 downto 0)        --mux for stage 3 output
     );
@@ -116,6 +119,7 @@ begin
         dataBi      => dataBOut,
         dataCi      => dataCOut,
         aluOppi     => aluOppi,
+        alu_opp_leni => alu_opp_leni,
         msmux_seli  => msmux_seli,
         alumux_seli => alumux_seli,
         clk         => clk,
@@ -124,6 +128,7 @@ begin
         dataBo      => dataB,
         dataCo      => dataC,
         aluOppo     => aluOppo,
+        alu_opp_leno => alu_opp_leno,
         msmux_selo  => msmux_selo,
         alumux_selo => alumux_selo
     );

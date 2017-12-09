@@ -1,5 +1,4 @@
 ----------------------------------------------------------------------------------
--- Engineer:        Bryant Gonzaga
 -- Create Date:     07/18/2017 05:07:27 PM
 -- Module Name:     bit_alu - structural
 -- Project Name:    pipelined_multimedia_cell_lite_unit

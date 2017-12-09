@@ -1,5 +1,4 @@
 ----------------------------------------------------------------------------------
--- Engineer:        Bryant Gonzaga
 -- Create Date:     07/14/2017 10:49:37 PM
 -- Module Name:     full_adder - datatflow
 -- Project Name:    pipelined_multimedia_cell_lite_unit
