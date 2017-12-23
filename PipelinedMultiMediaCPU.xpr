@@ -53,173 +53,212 @@
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
       <Filter Type="Srcs"/>
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/carry_lookahead_4bit.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/carry_lookahead_4bit.vhd"/>
+          <Attr Name="ImportTime" Val="1512584722"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/full_adder.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/full_adder.vhd"/>
+          <Attr Name="ImportTime" Val="1512584722"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/and_gate.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/and_gate.vhd"/>
+          <Attr Name="ImportTime" Val="1512584709"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/or_gate.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/or_gate.vhd"/>
+          <Attr Name="ImportTime" Val="1512584722"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/mux_n_in_1_out.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/mux_n_in_1_out.vhd"/>
+          <Attr Name="ImportTime" Val="1512584676"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/bit_alu.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/bit_alu.vhd"/>
+          <Attr Name="ImportTime" Val="1512584707"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/imports/Design_Sources/alu_4bit_with_cla.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PSRCDIR/Design_Sources/alu_4bit_with_cla.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/alu_4bit_with_cla.vhd"/>
           <Attr Name="ImportTime" Val="1512584637"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/carry_lookahead_4bit.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/alu_16bit_with_cla.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/alu_16bit_with_cla.vhd"/>
+          <Attr Name="ImportTime" Val="1512584623"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/full_adder.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/alu_64bit_with_cla.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/alu_64bit_with_cla.vhd"/>
+          <Attr Name="ImportTime" Val="1512584582"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/and_gate.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/binary_counter.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/binary_counter.vhd"/>
+          <Attr Name="ImportTime" Val="1512548535"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/or_gate.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/broadcast.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/broadcast.vhd"/>
+          <Attr Name="ImportTime" Val="1512606314"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/mux_n_in_1_out.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/hamming.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/hamming.vhd"/>
+          <Attr Name="ImportTime" Val="1512606312"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/bit_alu.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/if_id_reg.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/if_id_reg.vhd"/>
+          <Attr Name="ImportTime" Val="1512583774"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/instruction_buffer.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/instruction_buffer.vhd"/>
+          <Attr Name="ImportTime" Val="1512547770"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/leadingZero.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/leadingZero.vhd"/>
+          <Attr Name="ImportTime" Val="1512606305"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/stage_1.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/stage_1.vhd"/>
+          <Attr Name="ImportTime" Val="1512583849"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Design_Sources/register_file.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PSRCDIR/Design_Sources/register_file.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/register_file.vhd"/>
           <Attr Name="ImportTime" Val="1512551062"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/alu_64bit_with_cla.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/rd_ex_reg.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/rd_ex_reg.vhd"/>
+          <Attr Name="ImportTime" Val="1512584022"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/binary_counter.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/stage_2.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/stage_2.vhd"/>
+          <Attr Name="ImportTime" Val="1512584114"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/broadcast.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/shiftLeftHalfImm.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/shiftLeftHalfImm.vhd"/>
+          <Attr Name="ImportTime" Val="1512586116"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/hamming.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/stage_3.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/stage_3.vhd"/>
+          <Attr Name="ImportTime" Val="1512606265"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/if_id_reg.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/mm_cpu.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/mm_cpu.vhd"/>
+          <Attr Name="ImportTime" Val="1512584428"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/instruction_buffer.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/boothMulUnsigned.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/boothMulUnsigned.vhd"/>
+          <Attr Name="ImportTime" Val="1512585819"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/leadingZero.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/rotatorRight.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/rotatorRight.vhd"/>
+          <Attr Name="ImportTime" Val="1512585868"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/stage_1.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/Design_Sources/boothMulSigned.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/new/register_file.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/new/rd_ex_reg.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/new/stage_2.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/shiftLeftHalfImm.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/new/stage_3.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/Design_Sources/stage_1.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/new/or_gate.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Design_Sources/boothMulSigned.vhd"/>
+          <Attr Name="ImportTime" Val="1512585817"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="alu_4bit_with_cla"/>
+        <Option Name="TopModule" Val="mm_cpu"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
@@ -231,6 +270,12 @@
     </FileSet>
     <FileSet Name="ALU_Sims" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/ALU_Sims">
       <Filter Type="Srcs"/>
+      <File Path="$PPRDIR/../Design_Sources/alu_4bit_with_cla.vhd">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/ALU_Sims/alu_16bit_with_cla_tb.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -238,13 +283,6 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/ALU_Sims/alu_4bit_with_cla_tb.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/ALU_Sims/new/alu_4bit_with_cla_tb.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -263,16 +301,15 @@
     </FileSet>
     <FileSet Name="CPU_testbench" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/CPU_testbench">
       <Filter Type="Srcs"/>
-      <File Path="$PSRCDIR/CPU_testbench/new/mm_cpu_tb.vhd">
+      <File Path="$PPRDIR/../Design_Sources/mm_cpu.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="alu_4bit_with_cla"/>
+        <Option Name="TopModule" Val="mm_cpu"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="TransportPathDelay" Val="0"/>

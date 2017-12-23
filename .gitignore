@@ -4,3 +4,6 @@
 *PipelinedMultiMediaCPU.ip_user_files/
 *PipelinedMultiMediaCPU.runs/
 *PipelinedMultiMediaCPU.sim/
+*.jou
+*.log
+*.str
