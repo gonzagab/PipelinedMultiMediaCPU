@@ -31,16 +31,16 @@ entity register_file is
 	);
 	port(
             --Inputs--
-        regA	: in std_logic_vector(size-1 downto 0);	--address to register 1
-        regB	: in std_logic_vector(size-1 downto 0);	--address to register 2
-        regC	: in std_logic_vector(size-1 downto 0);	--address to register 3
-        regWrt  : in std_logic_vector(size-1 downto 0);	--address to register to be written
-        dataWrt	: in std_logic_vector(width-1 downto 0);--data to be written
-        write	: in std_logic;
+        reg_a    : in std_logic_vector(size-1 downto 0);  --address to register 1
+        reg_b    : in std_logic_vector(size-1 downto 0);  --address to register 2
+        reg_c    : in std_logic_vector(size-1 downto 0);  --address to register 3
+        reg_wrt  : in std_logic_vector(size-1 downto 0);  --address to register to be written
+        data_wrt : in std_logic_vector(width-1 downto 0); --data to be written
+        wrt_en : in std_logic;
             --Outputs--
-        dataA	: out std_logic_vector(width-1 downto 0);
-        dataB	: out std_logic_vector(width-1 downto 0);
-        dataC	: out std_logic_vector(width-1 downto 0)
+        data_a  : out std_logic_vector(width-1 downto 0);
+        data_b  : out std_logic_vector(width-1 downto 0);
+        data_c  : out std_logic_vector(width-1 downto 0)
 	);
 end register_file;
 
@@ -48,13 +48,13 @@ architecture behavioral of register_file is
 type MEM is array(0 to (2**size) - 1) of std_logic_vector(width-1 downto 0);
 signal registers: MEM;
 begin
-	rd_wrt: process(regA, regB, regC, regWrt, dataWrt, write)
+	rd_wrt: process(reg_a, reg_b, reg_c, reg_wrt, data_wrt, wrt_en)
 	begin
-		if (write = '1') then
-			registers(to_integer(unsigned(regWrt))) <= dataWrt;
+		if (wrt_en = '1') then
+			registers(to_integer(unsigned(reg_wrt))) <= data_wrt;
 		end if;
-		dataA <= registers(to_integer(unsigned(regA)));
-		dataB <= registers(to_integer(unsigned(regB)));
-        dataC <= registers(to_integer(unsigned(regC)));
+		data_a <= registers(to_integer(unsigned(reg_a)));
+		data_b <= registers(to_integer(unsigned(reg_b)));
+        data_c <= registers(to_integer(unsigned(reg_c)));
 	end process;
 end behavioral;

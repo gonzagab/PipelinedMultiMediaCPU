@@ -42,14 +42,14 @@ signal regB        : std_logic_vector(4 downto 0); --address for rs2; regB
 signal regC        : std_logic_vector(4 downto 0); --address for rs3; regC
 
 signal regD        : std_logic_vector(4 downto 0); --address for destination register
-signal write_en    : std_logic;                                  --write enable control signal
-signal ma_ms_sel   : std_logic;                            --multiple add/sub high or low.
+signal write_en    : std_logic;                    --write enable control signal
+signal ma_ms_sel   : std_logic;                    --multiple add/sub high or low.
 
-signal aluOpp      : std_logic_vector(2 downto 0);        --ALU Oppcode. Incicates function
+signal aluOpp      : std_logic_vector(2 downto 0); --ALU Oppcode. Incicates function
 signal alu_opp_len : std_logic_vector(1 downto 0);     
-signal immediate   : std_logic_vector(15 downto 0);       --16-bit immediate for li
-signal msmux_sel   : std_logic_vector(1 downto 0);               --mux to alu second param
-signal alumux_sel  : std_logic_vector(2 downto 0);               --mux for stage 3 output
+signal immediate   : std_logic_vector(15 downto 0);--16-bit immediate for li
+signal msmux_sel   : std_logic_vector(1 downto 0); --mux to alu second param
+signal alumux_sel  : std_logic_vector(2 downto 0); --mux for stage 3 output
 
 --STAGE 2 --> STAGE 3--
 signal dataA       : std_logic_vector(63 downto 0);
@@ -86,6 +86,27 @@ begin
             msmux_sel   => msmux_sel  ,
             alumux_sel  => alumux_sel 
         );
+        
+        
+                --Instruction Decoder--
+    id: entity xil_defaultlib.if_id_reg
+        generic map(instr_size => width, addr_length => size)
+        port map(clk => clk, instruction => instr,
+        regA      =>    regA        ,
+        regB      =>    regB        ,
+        regC      =>    regC        ,
+        regD      =>    regD        ,
+        aluOpp    =>    aluOpp      ,
+        alu_opp_len => alu_opp_len,
+        immediate =>    immediate   ,
+        write_en  =>    write_en    ,
+        msmux_sel =>    msmux_sel   ,
+        alumux_sel=>    alumux_sel  ,
+        ma_ms_sel =>    ma_ms_sel
+        );
+
+        
+        
         
         --STAGE 2: Register file and execution register-- 
     stage_2: entity xil_defaultlib.stage_2

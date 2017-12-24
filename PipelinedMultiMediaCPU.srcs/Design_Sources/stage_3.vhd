@@ -78,35 +78,11 @@ begin
             result  => alu_result
         );
         
-        --Multiply Unit--  
-        
+        --Multiply Unit--    
         --Shift Unit--
-    shift_unit: entity xil_defaultlib.shiftLeftHalfImm
-        port map(
-            rs1 => dataA,
-            rs2 => dataB(4 downto 0),
-            output => shift_result
-        );
         --Broadcast Unit-- 
-        broadcast_unit: entity xil_defaultlib.broadcast
-            port map(
-            input => dataA(31 downto 0),
-            output =>  broad_result
-            );
         --Hamming Weight Unit--    
-        hamming_weight_unit: entity xil_defaultlib.hamming
-            port map(
-            input => dataA(15 downto 0),
-            output => ham_result(15 downto 0)
-            );
-        
         --Leading Zero Unit--
-        leading_zero_unit: entity xil_defaultlib.leadingzero
-            port map(
-            input => dataA(15 downto 0),
-            output => zero_result(15 downto 0)
-            );
-                
         --Result MUX--
     res_mux: process(alu_result, mpy_result, shift_result, broad_result, ham_result, zero_result)
     begin

@@ -36,25 +36,20 @@ entity stage_1 is
         write       : in std_logic;
         instruction : in std_logic_vector(width-1 downto 0);
             --Outputs--
-        regA        : out std_logic_vector(size - 1 downto 0); --address for rs1; regA
-        regB        : out std_logic_vector(size - 1 downto 0); --address for rs2; regB
-        regC        : out std_logic_vector(size - 1 downto 0); --address for rs3; regC
-        
-        regD        : out std_logic_vector(size - 1 downto 0); --address for destination register
-        write_en    : out std_logic;                                  --write enable control signal
-        ma_ms_sel   : out std_logic;                            --multiple add/sub high or low. 
-
-        aluOpp      : out std_logic_vector(2 downto 0);        --ALU Oppcode. Incicates function
-        alu_opp_len : out std_logic_vector(1 downto 0);    
-        immediate   : out std_logic_vector(15 downto 0);       --16-bit immediate for li
-        msmux_sel   : out std_logic_vector(1 downto 0);               --mux to alu second param
-        alumux_sel  : out std_logic_vector(2 downto 0)               --mux for stage 3 output
+        inst_type   : out std_logic_vector(1 downto 0);         --format of instruction
+        li_pos      : out std_logic_vector(1 downto 0);         --position of 16 bit immediate
+        immediate   : out std_logic_vector(15 downto 0);        --16-bit immediate for li
+        reg_d       : out std_logic_vector(size - 1 downto 0);  --address for rd
+        mult_opp    : out std_logic_vector(1 downto 0);         --mult. sub/add opp
+        reg_c       : out std_logic_vector(size - 1 downto 0);  --address for rs3
+        reg_b       : out std_logic_vector(size - 1 downto 0);  --address for rs2  
+        reg_a       : out std_logic_vector(size - 1 downto 0)  --address for rs1
     );
 end stage_1;
 
 architecture structural of stage_1 is
-signal addr  : std_logic_vector(size - 1 downto 0);
-signal instr : std_logic_vector(width - 1 downto 0);
+signal addr : std_logic_vector(size - 1 downto 0);
+signal inst : std_logic_vector(width - 1 downto 0);
 begin
 		--Program Counter--
 	pc: entity xil_defaultlib.binary_counter
@@ -63,21 +58,17 @@ begin
 		--Instruction Fetch--
 	ib: entity xil_defaultlib.instruction_buffer
 		generic map(size => size, width => width)
-		port map(addr => addr, d => instruction, write => write, clk => clk, q => instr);
-        --Instruction Decoder--
-    id: entity xil_defaultlib.if_id_reg
-        generic map(instr_size => width, addr_length => size)
-        port map(clk => clk, instruction => instr,
-        regA      =>    regA        ,
-        regB      =>    regB        ,
-        regC      =>    regC        ,
-        regD      =>    regD        ,
-        aluOpp    =>    aluOpp      ,
-        alu_opp_len => alu_opp_len,
-        immediate =>    immediate   ,
-        write_en  =>    write_en    ,
-        msmux_sel =>    msmux_sel   ,
-        alumux_sel=>    alumux_sel  ,
-        ma_ms_sel =>    ma_ms_sel
-        );
+		port map(addr => addr, d => instruction, write => write, clk => clk, q => inst);
+		--Partition Instruction--
+    partition: process (inst)
+    begin
+        inst_type <= inst(23 downto 22);
+        li_pos    <= inst(22 downto 21);
+        immediate <= inst(20 downto 5);
+        reg_d     <= inst(4 downto 0);
+        mult_opp  <= inst(21 downto 20);
+        reg_c     <= inst(19 downto 15);
+        reg_b     <= inst(14 downto 10);
+        reg_a     <= inst(9 downto 5);
+    end process;
 end structural;

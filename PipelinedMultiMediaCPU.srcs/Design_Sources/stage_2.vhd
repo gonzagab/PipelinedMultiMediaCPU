@@ -29,24 +29,19 @@ entity stage_2 is
         width : integer := 24 --buffer width. in bits
     );
     port(
-            --Inputs--
-        regA        : in std_logic_vector(size - 1 downto 0); --address for rs1; regA
-        regB        : in std_logic_vector(size - 1 downto 0); --address for rs2; regB
-        regC        : in std_logic_vector(size - 1 downto 0); --address for rs3; regC
-        
-        regD        : in std_logic_vector(size - 1 downto 0); --address for destination register
-        write_en    : in std_logic;                           --write enable control signal  
-        ma_ms_sel   : in std_logic;                           --multiple add/sub high or low.
-
-        aluOppi     : in std_logic_vector(2 downto 0);        --ALU Oppcode. Incicates function
-        alu_opp_leni : in std_logic_vector(1 downto 0);
-        immediate   : in std_logic_vector(15 downto 0);       --16-bit immediate for li      
-        msmux_seli  : in std_logic_vector(1 downto 0);        --mux to alu second param
-        alumux_seli : in std_logic_vector(2 downto 0);        --mux for stage 3 output
-        
-        data_wb     : in std_logic_vector(63 downto 0);       --data to be saved to register file
-        
-        clk         : in std_logic;                           --system clock
+            --Inputs from Stage 1--
+        inst_type   : in std_logic_vector(1 downto 0);  --address for rs1
+        li_pos      : in std_logic_vector(1 downto 0);  --address for rs2
+        immediate   : in std_logic_vector(15 downto 0); --address for rs3
+        reg_d       : in std_logic_vector(4 downto 0);  --address for destination register
+        mult_opp    : in std_logic_vector(1 downto 0);  --ALU Oppcode. Incicates function     
+        reg_c       : in std_logic_vector(4 downto 0);  --16-bit immediate for li
+        reg_b       : in std_logic_vector(4 downto 0);  --write enable control signal
+        reg_a       : in std_logic_vector(4 downto 0)   --mux to alu second param
+            --Inputs from Stage 3--
+        data_wb     : in std_logic_vector(63 downto 0); --data to be saved to register file
+        wrt_en      : in std_logic;                     --write enable for register file
+        reg_wrt     : in std_logic_vector(4 downto 0);  --address for destination register
             --Outputs--
         dataA       : out std_logic_vector(63 downto 0);
         dataB       : out std_logic_vector(63 downto 0);
@@ -64,13 +59,13 @@ signal internRegD      : std_logic_vector(4 downto 0);
 signal internWrite_en  : std_logic;
 signal internMaMs_sel  : std_logic;
 --into fowarding unit--
-signal regAData     : std_logic_vector(63 downto 0);
-signal regBData     : std_logic_vector(63 downto 0);
-signal regCData     : std_logic_vector(63 downto 0);
+signal reg_a_data     : std_logic_vector(63 downto 0);
+signal reg_b_data     : std_logic_vector(63 downto 0);
+signal reg_c_data     : std_logic_vector(63 downto 0);
 --out of fowarding unit--
-signal dataAOut     : std_logic_vector(63 downto 0);
-signal dataBOut     : std_logic_vector(63 downto 0);
-signal dataCO       : std_logic_vector(63 downto 0);
+signal data_a_out     : std_logic_vector(63 downto 0);
+signal data_b_out     : std_logic_vector(63 downto 0);
+signal data_c_out       : std_logic_vector(63 downto 0);
 --final dataC signal after multiplying--
 signal dataCOut     : std_logic_vector(63 downto 0);
 begin
@@ -78,45 +73,45 @@ begin
         generic map(size => 5, width => 64)
         port map(
                 --Input--
-            regA	 => regA,
-            regB     => regB,
-            regC     => regC,
-            regWrt   => internRegD,     --address to write to--
-            dataWrt  => data_wb,        --64 bit data to be written--
-            write    => internWrite_en, --allow for writing--
+            reg_a    => reg_a,
+            reg_b    => reg_b,
+            reg_c    => reg_c,
+            reg_wrt  => reg_wrt,
+            data_wrt => data_wb,
+            wrt_en   => wrt_en, --allow for writing--
                 --Output--
-            dataA    => regAData,
-            dataB    => regBData,
-            dataC    => regCData
+            data_a   => reg_a_data,
+            data_b   => reg_b_data,
+            data_c   => reg_c_data
         );
 
-    fwrdingUnit: process(regA, regB, regC, regD, regAData, regBData, regCData, data_wb)
+    fwrdingUnit: process(reg_a, reg_b, reg_c, reg_d, reg_a_data, reg_b_data, reg_c_data, data_wb)
     begin
-        if (regA = regD) then
-            dataAOut <= data_wb;
+        if (reg_a = reg_d) then
+            data_a_out <= data_wb;
         else
-            dataAOut <= regAData;
+            data_a_out <= reg_a_data;
         end if;
-        if (regB = regD) then
-            dataBOut <= data_wb;
+        if (reg_b = reg_d) then
+            data_b_out <= data_wb;
         else
-            dataBOut <= regBData;
+            data_b_out <= reg_b_data;
         end if;
-        if (regC = regD) then
+        if (reg_c = reg_d) then
             dataCO <= data_wb;
         else
-            dataCO <= regCData;
+            dataCO <= reg_c_data;
         end if;
     end process;
     
-    mpyBC: process(dataBOut, dataCO, internMaMs_sel)
+    mpyBC: process(data_b_out, data_c_out, internMaMs_sel)
     begin
     end process;
 
     rd_ex_reg: entity xil_defaultlib.rd_ex_reg
     port map(
-        dataAi      => dataAOut,
-        dataBi      => dataBOut,
+        dataAi      => data_a_out,
+        dataBi      => data_b_out,
         dataCi      => dataCOut,
         aluOppi     => aluOppi,
         alu_opp_leni => alu_opp_leni,
@@ -126,7 +121,7 @@ begin
             --Output--
         dataAo      => dataA,
         dataBo      => dataB,
-        dataCo      => dataC,
+        data_c_out      => dataC,
         aluOppo     => aluOppo,
         alu_opp_leno => alu_opp_leno,
         msmux_selo  => msmux_selo,
@@ -136,7 +131,7 @@ begin
     intern_reg: process(clk)
     begin
         if (rising_edge(clk)) then
-            internRegD     <= regD;
+            internRegD     <= reg_d;
             internWrite_en <= write_en;
             internMaMs_sel <= ma_ms_sel;
         end if;

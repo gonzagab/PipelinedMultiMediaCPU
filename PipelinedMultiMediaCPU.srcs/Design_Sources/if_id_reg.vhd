@@ -24,43 +24,45 @@ use IEEE.STD_LOGIC_1164.all;
 library XIL_DEFAULTLIB;
 
 entity if_id_reg is
-    generic(
-        instr_size  : integer := 24;
-        addr_length : integer := 5
-    );
 	port(
             --Input--
-        instruction : in std_logic_vector(instr_size - 1 downto 0);
-        clk         : in std_logic;	--system clock
+        clk         : in std_logic;	                    --system clock
+        inst_type_i : in std_logic_vector(1 downto 0);  --format of instruction
+        li_pos_i    : in std_logic_vector(1 downto 0);  --position of 16 bit immediate
+        immediate_i : in std_logic_vector(15 downto 0); --16-bit immediate for li
+        reg_d_i     : in std_logic_vector(4 downto 0);  --address for rd
+        mult_opp_i  : in std_logic_vector(1 downto 0);  --mult. sub/add opp
+        reg_c_i     : in std_logic_vector(4 downto 0);  --address for rs3
+        reg_b_i     : in std_logic_vector(4 downto 0);  --address for rs2  
+        reg_a_i     : in std_logic_vector(4 downto 0);  --address for rs1
             --Output--
-        regA        : out std_logic_vector(addr_length - 1 downto 0); --address for rs1; regA
-        regB        : out std_logic_vector(addr_length - 1 downto 0); --address for rs2; regB
-        regC        : out std_logic_vector(addr_length - 1 downto 0); --address for rs3; regC
-        regD        : out std_logic_vector(addr_length - 1 downto 0); --address for destination register
-        aluOpp      : out std_logic_vector(2 downto 0);               --ALU Oppcode. Incicates function	 
-        immediate   : out std_logic_vector(15 downto 0);              --16-bit immediate for li
-        write_en    : out std_logic;                                  --write enable control signal
-        msmux_sel   : out std_logic_vector(1 downto 0);               --mux to alu second param
-        alumux_sel  : out std_logic_vector(2 downto 0);               --mux for stage 3 output
-        ma_ms_sel   : out std_logic;                                  --multiple add/sub high or low.
-        alu_opp_len : out std_logic_vector(1 downto 0) 
+        inst_type   : out std_logic_vector(1 downto 0);  --address for rs1
+        li_pos      : out std_logic_vector(1 downto 0);  --address for rs2
+        immediate   : out std_logic_vector(15 downto 0); --address for rs3
+        reg_d       : out std_logic_vector(4 downto 0);  --address for destination register
+        mult_opp    : out std_logic_vector(1 downto 0);  --ALU Oppcode. Incicates function	 
+        reg_c       : out std_logic_vector(4 downto 0);  --16-bit immediate for li
+        reg_b       : out std_logic_vector(4 downto 0);  --write enable control signal
+        reg_a       : out std_logic_vector(4 downto 0)   --mux to alu second param
 	);						 						
 end if_id_reg;
 
 architecture behavioral of if_id_reg is
 begin
-    regAddrCalc: process(clk)
+    reg_proc: process (clk)
     begin
-        if(rising_edge(clk))then
-                --output all known data--
-            regD 	  <= instruction(4 downto 0);
-			regA      <= instruction(9 downto 5);
-			regB      <= instruction(14 downto 10);
-            regC 	  <= instruction(19 downto 15);
-			immediate <= instruction(20 downto 5);
-		end if;
-	end process;
-	
+        if (rising_edge(clk)) then
+            inst_type <= inst_type_i;
+            li_pos    <= li_pos_i;
+            immediate <= immediate_i;
+            reg_d     <= reg_d_i;
+            mult_opp  <= mult_opp_i;
+            reg_c     <= reg_c_i;
+            reg_b     <= reg_b_i;
+            reg_a     <= reg_a_i;
+        end if;
+    end process;
+
 	aluOppCalc: process(clk)
 	begin      --decode alu opp--
         if (rising_edge(clk)) then
