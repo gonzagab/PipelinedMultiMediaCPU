@@ -137,13 +137,13 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/Design_Sources/rd_ex_reg.vhd">
+      <File Path="$PSRCDIR/Design_Sources/stage_2.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/Design_Sources/stage_2.vhd">
+      <File Path="$PSRCDIR/Design_Sources/rd_ex_reg.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>

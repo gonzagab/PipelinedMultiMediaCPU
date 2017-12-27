@@ -29,46 +29,46 @@ entity stage_2 is
         width : integer := 24 --buffer width. in bits
     );
     port(
-            --Inputs from Stage 1--
-        inst_type   : in std_logic_vector(1 downto 0);  --address for rs1
-        li_pos      : in std_logic_vector(1 downto 0);  --address for rs2
-        immediate   : in std_logic_vector(15 downto 0); --address for rs3
-        reg_d       : in std_logic_vector(4 downto 0);  --address for destination register
-        mult_opp    : in std_logic_vector(1 downto 0);  --ALU Oppcode. Incicates function     
-        reg_c       : in std_logic_vector(4 downto 0);  --16-bit immediate for li
-        reg_b       : in std_logic_vector(4 downto 0);  --write enable control signal
-        reg_a       : in std_logic_vector(4 downto 0)   --mux to alu second param
-            --Inputs from Stage 3--
+            --Inputs from IF/ID Register--
+        inst_type   : in std_logic_vector(1 downto 0);  --instruction type
+        li_pos_i    : in std_logic_vector(1 downto 0);  --load immediate position
+        immediate_i : in std_logic_vector(15 downto 0); --immediate to be loaded
+        reg_d_i     : in std_logic_vector(4 downto 0);  --address for destination register
+        mult_opp    : in std_logic_vector(1 downto 0);  --multiply opperation code
+        reg_c       : in std_logic_vector(4 downto 0);  --address of rs3
+        reg_b       : in std_logic_vector(4 downto 0);  --address of rs2
+        reg_a       : in std_logic_vector(4 downto 0);  --address of rs1
+            --Inputs from WB Register--
         data_wb     : in std_logic_vector(63 downto 0); --data to be saved to register file
-        wrt_en      : in std_logic;                     --write enable for register file
-        reg_wrt     : in std_logic_vector(4 downto 0);  --address for destination register
+        wrt_en_wb   : in std_logic;                     --write enable for register file
+        reg_wrt_wb  : in std_logic_vector(4 downto 0);  --address for destination register
             --Outputs--
-        dataA       : out std_logic_vector(63 downto 0);
-        dataB       : out std_logic_vector(63 downto 0);
-        dataC       : out std_logic_vector(63 downto 0);
-        aluOppo     : out std_logic_vector(2 downto 0);        --ALU Oppcode. Incicates function
-        alu_opp_leno : out std_logic_vector(1 downto 0);
-        msmux_selo  : out std_logic_vector(1 downto 0);        --mux to alu second param
-        alumux_selo : out std_logic_vector(2 downto 0)        --mux for stage 3 output
+        data_a      : out std_logic_vector(63 downto 0);--
+        data_b      : out std_logic_vector(63 downto 0);
+        alu_opp     : out std_logic_vector(2 downto 0);--ALU Oppcode. Incicates function
+        opp_len     : out std_logic_vector(1 downto 0);
+        sgn_sat     : out std_logic;
+        rslt_sel    : out std_logic_vector(2 downto 0);
+        wrt_en      : out std_logic;
+        
+        immediate   : out std_logic_vector(15 downto 0);
+        reg_d       : out std_logic_vector(4 downto 0);
+        li_pos      : out std_logic_vector(1 downto 0)
     );
 end stage_2;
 
 architecture structural of stage_2 is
---Internal FFs for Signals--
-signal internRegD      : std_logic_vector(4 downto 0);
-signal internWrite_en  : std_logic;
-signal internMaMs_sel  : std_logic;
 --into fowarding unit--
 signal reg_a_data     : std_logic_vector(63 downto 0);
 signal reg_b_data     : std_logic_vector(63 downto 0);
 signal reg_c_data     : std_logic_vector(63 downto 0);
 --out of fowarding unit--
-signal data_a_out     : std_logic_vector(63 downto 0);
-signal data_b_out     : std_logic_vector(63 downto 0);
-signal data_c_out       : std_logic_vector(63 downto 0);
---final dataC signal after multiplying--
-signal dataCOut     : std_logic_vector(63 downto 0);
+signal data_b_fwrd    : std_logic_vector(63 downto 0);
+signal data_c_fwrd    : std_logic_vector(63 downto 0);
+--product of b and c--
+signal product_bc     : std_logic_vector(63 downto 0);
 begin
+    --Register File--
 	register_file: entity xil_defaultlib.register_file
         generic map(size => 5, width => 64)
         port map(
@@ -76,64 +76,163 @@ begin
             reg_a    => reg_a,
             reg_b    => reg_b,
             reg_c    => reg_c,
-            reg_wrt  => reg_wrt,
+            reg_wrt  => reg_wrt_wb,
             data_wrt => data_wb,
-            wrt_en   => wrt_en, --allow for writing--
+            wrt_en   => wrt_en_wb,
                 --Output--
             data_a   => reg_a_data,
             data_b   => reg_b_data,
             data_c   => reg_c_data
         );
-
-    fwrdingUnit: process(reg_a, reg_b, reg_c, reg_d, reg_a_data, reg_b_data, reg_c_data, data_wb)
+    
+    --Fowarding Unit--
+    fwrding_unit: process(reg_a, reg_b, reg_c, reg_wrt_wb, reg_a_data, reg_b_data, reg_c_data, data_wb)
     begin
-        if (reg_a = reg_d) then
-            data_a_out <= data_wb;
+        --data_a--
+        if (reg_a = reg_wrt_wb) then
+            data_a <= data_wb;
         else
-            data_a_out <= reg_a_data;
+            data_a <= reg_a_data;
         end if;
-        if (reg_b = reg_d) then
-            data_b_out <= data_wb;
+        --data_b--
+        if (reg_b = reg_wrt_wb) then
+            data_b_fwrd <= data_wb;
         else
-            data_b_out <= reg_b_data;
+            data_b_fwrd <= reg_b_data;
         end if;
-        if (reg_c = reg_d) then
-            dataCO <= data_wb;
+        --data_c--
+        if (reg_c = reg_wrt_wb) then
+            data_c_fwrd <= data_wb;
         else
-            dataCO <= reg_c_data;
+            data_c_fwrd <= reg_c_data;
         end if;
     end process;
     
-    mpyBC: process(data_b_out, data_c_out, internMaMs_sel)
+    --ALU Opp Decoder--
+    alu_opp_decode: process(inst_type, reg_c, mult_opp)
     begin
+        --R3 Instruction Type--
+        if (inst_type = "00") then
+            if ( (reg_c(3 downto 0) = "1000") or (reg_c(3 downto 0) = "1010") or (reg_c(3 downto 0) = "1100") ) then
+                alu_opp <= "001";   --SUM--
+            elsif (reg_c(3 downto 0) = "0010") then
+                alu_opp <= "010";   --AND--
+            elsif (reg_c(3 downto 0) = "0011") then
+                alu_opp <= "011";   --OR--
+            elsif ( (reg_c(3 downto 0) = "1001") or (reg_c(3 downto 0) = "1011") or (reg_c(3 downto 0) = "1101") ) then
+                alu_opp <= "101";   --SUB--
+            else
+                alu_opp <= "000";   --NOP--
+            end if;
+        --R4 Instruction Type--
+        elsif (inst_type = "01") then
+            if ( (mult_opp = "00") or (mult_opp = "01") ) then
+                alu_opp <= "001";    --SUM--
+            else
+                alu_opp <= "101";    --SUB--
+            end if;
+        --R1 Instruction Type--
+        else
+            alu_opp <= "000";       --NOP--
+        end if;
     end process;
-
-    rd_ex_reg: entity xil_defaultlib.rd_ex_reg
-    port map(
-        dataAi      => data_a_out,
-        dataBi      => data_b_out,
-        dataCi      => dataCOut,
-        aluOppi     => aluOppi,
-        alu_opp_leni => alu_opp_leni,
-        msmux_seli  => msmux_seli,
-        alumux_seli => alumux_seli,
-        clk         => clk,
-            --Output--
-        dataAo      => dataA,
-        dataBo      => dataB,
-        data_c_out      => dataC,
-        aluOppo     => aluOppo,
-        alu_opp_leno => alu_opp_leno,
-        msmux_selo  => msmux_selo,
-        alumux_selo => alumux_selo
-    );
     
-    intern_reg: process(clk)
+    --Opp Length Decoder--
+    opp_len_decode: process(inst_type, reg_c)
     begin
-        if (rising_edge(clk)) then
-            internRegD     <= reg_d;
-            internWrite_en <= write_en;
-            internMaMs_sel <= ma_ms_sel;
+        --R3 Instruction Type--
+        if (inst_type = "00") then
+            if ( (reg_c(3 downto 0) = "0001") or (reg_c(3 downto 0) = "0101") or
+                 (reg_c(3 downto 0) = "1000") or (reg_c(3 downto 0) = "1001") ) then
+                opp_len <= "01";    --32 bit opperation
+            elsif ( (reg_c(3 downto 0) = "0010") or (reg_c(3 downto 0) = "0110") or
+                    (reg_c(3 downto 0) = "0011") or (reg_c(3 downto 0) = "0000") ) then
+                opp_len <= "00";    --64 bit opperation
+            elsif (reg_c(3 downto 0) = "1111") then
+                opp_len <= "11";    --8 bit opperation
+            else
+                opp_len <= "10";    --16 bit opperation
+            end if;
+        --R4 Instruction Type--
+        elsif (inst_type = "01") then
+            opp_len <= "01";        --32 bit opperation
+        --R1 Instruction Type--
+        else
+            opp_len <= "00";       --64 bit opperation
+        end if;
+    end process;
+    
+    --Write Enable Decoder--
+    wrt_en_decode: process(inst_type, reg_c)
+    begin
+        --R3 Instruction Type--
+        if (inst_type = "00") then
+            if (reg_c = "00000") then
+                wrt_en <= '0';    --only nop
+            else
+                wrt_en <= '1';
+            end if;
+        --R1 & R4 Instruction Type--
+        else
+            wrt_en <= '1';
+        end if;
+    end process;
+    
+    --Signed/Saturated Opperation Decoder--
+    sgn_sat_decode: process(inst_type, reg_c)
+    begin
+        --R4 Instruction Type--
+        if (inst_type = "01") then
+            sgn_sat <= '1';
+        --R3 Instruction Type--
+        elsif (inst_type = "00") then
+            if (reg_c(3 downto 0) = "1100") or (reg_c(3 downto 0) = "1101") then
+                sgn_sat <= '1';
+             else
+                sgn_sat <= '0';
+            end if;
+        --R1 Instruction Type--
+        else
+            sgn_sat <= '0';
+        end if;
+    end process;
+    
+    --Result Select Decoder--
+    rslt_sel_decode: process(inst_type, reg_c)
+    begin
+        --R4 Instruction Type--
+        if (inst_type = "01") then
+            rslt_sel <= "000";
+        --R3 Instruction Type--
+        elsif (inst_type = "00") then
+            if ( (reg_c(3 downto 0) = "0110") or
+                 (reg_c(3 downto 0) = "0111") then
+                rslt_sel <= "010";  --shift or rotate
+            elsif (reg_c(3 downto 0) = "1110") then
+                rslt_sel <= "001";  --multiply
+            elsif (reg_c(3 downto 0) = "0001") then
+                rslt_sel <= "011";  --broadcast
+            elsif (reg_c(3 downto 0) = "0100") then
+                rslt_sel <= "100";  --hamming
+            elsif (reg_c(3 downto 0) = "0101") then
+                rslt_sel <= "101";  --leading zeroes
+            else
+                rslt_sel <= "000";  --alu
+            end if;
+        --R1 Instruction Type--
+        else
+            rslt_sel <= "110";
+        end if;
+    end process;
+    --Data B * Data C--
+    
+    --Choose B*C or just B--
+    b_output_calc: process(data_b_fwrd, product_bc)
+    begin
+        if (inst_type = "01") then
+            data_b <= product_bc;
+        else
+            data_b <= data_b_fwrd;
         end if;
     end process;
 end structural;

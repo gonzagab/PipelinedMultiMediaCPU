@@ -23,41 +23,48 @@ use IEEE.STD_LOGIC_1164.all;
 --Xilinx Default Library--
 library XIL_DEFAULTLIB;
 
-entity rd_ex_reg is
+entity id_ex_reg is
 	port(
             --Inputs--
-        dataAi      : in std_logic_vector(63 downto 0);	--data from register A; rs1
-        dataBi      : in std_logic_vector(63 downto 0);	--data from register B; rs2
-        dataCi      : in std_logic_vector(63 downto 0);	--data from register C; rs3
-        aluOppi     : in std_logic_vector(2 downto 0);	--ALU Opp
-        alu_opp_leni : in std_logic_vector(1 downto 0);
-        msmux_seli  : in std_logic_vector(1 downto 0);    --select for alu param input
-        alumux_seli : in std_logic_vector(2 downto 0);
-        
-        clk        : in std_logic;						--System clock
+        data_a_i    : in std_logic_vector(63 downto 0); --Data A
+        data_b_i    : in std_logic_vector(63 downto 0); --Data B
+        alu_opp_i   : in std_logic_vector(2 downto 0);  --ALU Oppcode
+        opp_len_i   : in std_logic_vector(1 downto 0);
+        sgn_sat_i   : in std_logic;
+        wrt_en_i    : in std_logic;
+        reg_d_i     : in std_logic_vector(4 downto 0);
+        immediate_i : in std_logic_vector(15 downto 0);
+        li_pos_i    : in std_logic_vector(1 downto 0);  --load immediate position
+        rslt_sel_i  : in std_logic_vector(2 downto 0);
+        clk         : in std_logic;					 --System clock
             --Outputs--
-        dataAo      : out std_logic_vector(63 downto 0);	--data from register A; rs1
-        dataBo      : out std_logic_vector(63 downto 0);	--data from register B; rs2
-        dataCo      : out std_logic_vector(63 downto 0);	--data from register C; rs3
-        aluOppo     : out std_logic_vector(2 downto 0);	    --ALU opp
-        alu_opp_leno : out std_logic_vector(1 downto 0);
-        msmux_selo  : out std_logic_vector(1 downto 0);    --select for alu param input
-        alumux_selo : out std_logic_vector(2 downto 0)
-	);
-end rd_ex_reg;
+        data_a      : out std_logic_vector(63 downto 0); --Data A
+        data_b      : out std_logic_vector(63 downto 0); --Data B
+        alu_opp     : out std_logic_vector(2 downto 0);  --ALU Oppcode
+        opp_len     : out std_logic_vector(1 downto 0);
+        sgn_sat     : out std_logic;
+        wrt_en      : out std_logic;
+        reg_d       : out std_logic_vector(4 downto 0);
+        immediate   : out std_logic_vector(15 downto 0);
+        li_pos      : out std_logic_vector(1 downto 0);  --load immediate position
+        rslt_sel    : out std_logic_vector(2 downto 0)
+    );
+end id_ex_reg;
 
-architecture behavioral of rd_ex_reg is
+architecture behavioral of id_ex_reg is
 begin
-	p1: process(clk)
+	reg_proc: process(clk)
 	begin
 		if (rising_edge(clk)) then
-			dataAo 	    <= dataAi;
-			dataBo 	    <= dataBi;
-			dataCo 	    <= dataCi;
-			aluOppo     <= aluOppi;
-			alu_opp_leno <= alu_opp_leni;
-			msmux_selo  <= msmux_seli;
-            alumux_selo <= alumux_seli;
+			data_a    <= data_a_i;
+			data_b    <= data_b_i;
+			alu_opp   <= alu_opp_i;
+			opp_len   <= opp_len_i;
+			sgn_sat   <= sgn_sat_i;
+			wrt_en    <= wrt_en_i;
+			reg_d     <= reg_d_i;
+			immediate <= immediate_i;
+			rslt_sel  <= rslt_sel_i;
 		end if;
 	end process;
 end behavioral;
